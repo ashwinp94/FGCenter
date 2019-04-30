@@ -71,7 +71,7 @@ namespace FGCenter.Data
                     PostId = 1,
                     Title = "Bison Combos",
                     Text = "Vtrigger 2 combos",
-                    UserId =user.Id,
+                    UserId = user.Id,
                     GameId =1 }
             );
             modelBuilder.Entity<Comment>().HasData(

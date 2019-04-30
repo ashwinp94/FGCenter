@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,6 +26,7 @@ namespace FGCenter.Models
         [Required]
         public ApplicationUser User { get; set; }
 
+        [ForeignKey("Games")]
         public Game Game { get; set; }
 
         public int GameId { get; set; }
