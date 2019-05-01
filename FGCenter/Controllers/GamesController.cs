@@ -8,15 +8,24 @@ using Microsoft.EntityFrameworkCore;
 using FGCenter.Data;
 using FGCenter.Models;
 using FGCenter.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace FGCenter.Controllers
 {
     public class GamesController : Controller
     {
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+
+
         private readonly ApplicationDbContext _context;
 
-        public GamesController(ApplicationDbContext context)
+        public GamesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -37,6 +46,7 @@ namespace FGCenter.Controllers
             var model = new GameDetailViewModel();
 
             var GroupedPosts = await _context.Post
+                .Include(p=> p.User)
                 .Include(p => p.Game)
                 .Where(p => p.GameId == id)
                 .ToListAsync();

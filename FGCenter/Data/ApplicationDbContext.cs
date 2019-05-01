@@ -38,7 +38,9 @@ namespace FGCenter.Data
                 .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<Comment>()
-                .HasOne(c => c.User).WithMany(u => u.Comments).OnDelete(DeleteBehavior.Restrict);
+                .HasOne(c => c.User)
+                .WithMany(u => u.Comments)
+                .OnDelete(DeleteBehavior.Restrict);
 
             ApplicationUser user = new ApplicationUser
             {
