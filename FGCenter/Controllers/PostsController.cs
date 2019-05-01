@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FGCenter.Data;
 using FGCenter.Models;
+using FGCenter.Models.ViewModels;
 
 namespace FGCenter.Controllers
 {
@@ -34,16 +35,16 @@ namespace FGCenter.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Post
-                .Include(p => p.Game)
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
-            {
-                return NotFound();
-            }
+            var model = new PostDetailViewModel();
 
-            return View(post);
+            var GroupedPosts = await _context.Comment
+                .Include(p => p.Post)
+                .Where(p => p.PostId == id)
+                .ToListAsync();
+
+            model.GroupedComments = GroupedPosts;
+
+            return View(model);
         }
 
         // GET: Posts/Create
