@@ -19,6 +19,9 @@
                     @Html.DisplayNameFor(model => model.Post.Title)
                 </th>
                 <th>
+                   Number of Comments
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Post.DatePosted)
                 </th>
                 <th>
@@ -27,12 +30,18 @@
             </tr>
         </thead>
         <tbody>
+            <tr>
+            @foreach (var p in Model.PostsWithCommentCount)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => p.Post.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => p.NumberOfComments)
+                </td>
+            }
             @foreach (Post p in Model.GroupedPosts)
             {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.Title)
-                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => p.DatePosted)
                     </td>
@@ -41,11 +50,11 @@
                     </td>
                     <td>
                         <a asp-controller="Posts" asp-action="Edit" asp-route-id="@p.PostId">Edit</a> |
-                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.PostId">Details</a> |
+                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.PostId">View Comments</a> |
                         <a asp-controller="Posts" asp-action="Delete" asp-route-id="@p.PostId">Delete</a>
                     </td>
-                </tr>
             }
-        </tbody>
-    </table>
+                </tr>
+            </tbody>
+        </table>
 </div>

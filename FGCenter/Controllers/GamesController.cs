@@ -42,24 +42,44 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
-
+            //CREATE A NEW GameDetailViewModel
             var model = new GameDetailViewModel();
 
+            //ADD POSTS TO THE MODEL
             var GroupedPosts = await _context.Post
                 .Include(p=> p.User)
                 .Include(p => p.Game)
                 .Where(p => p.GameId == id)
                 .ToListAsync();
 
+            model.GroupedPosts = GroupedPosts;
+
             var game = await _context.Game
                 .Where(g => g.GameId == id).ToListAsync();
-
+            
+            //GET GAME INFO
             foreach(Game g in game)
             {
                 model.Game = g;
             }
 
-            model.GroupedPosts = GroupedPosts;
+            //GET COMMENT COUNT
+            var CommentCount = await (
+                from p in _context.Post
+                join t in _context.Comment
+                on p.PostId equals t.PostId
+                group new { p, t } by new { t.PostId, p.Title } into grouped
+                select new PostWithCommentCountViewModel
+                {
+                    NumberOfComments = grouped.Select(x => x.t.PostId).Count(),
+                    Post = new Post
+                    {
+                        PostId = grouped.Key.PostId,
+                        Title = grouped.Key.Title,
+                    }
+                }).ToListAsync();
+
+            model.PostsWithCommentCount = CommentCount;
 
             return View(model);
            

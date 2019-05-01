@@ -13,6 +13,6 @@ namespace FGCenter.Models.ViewModels
 
         public Game Game { get; set; }
 
-
+        public List<PostWithCommentCountViewModel> PostsWithCommentCount { get; set; }
     }
 }
