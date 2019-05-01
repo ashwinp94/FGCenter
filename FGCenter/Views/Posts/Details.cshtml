@@ -40,5 +40,5 @@
 </div>
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Games" asp-action="Details" asp-route-id="@Model.Game.GameId">Back to List</a>
 </div>

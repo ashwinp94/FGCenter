@@ -49,6 +49,14 @@ namespace FGCenter.Controllers
                 .Where(p => p.PostId == id)
                 .ToListAsync();
 
+            var game = await _context.Game
+                .Where(g => g.GameId == id).ToListAsync();
+
+            foreach (Game g in game)
+            {
+                model.Game = g;
+            }
+
             model.GroupedComments = GroupedPosts;
 
             return View(model);

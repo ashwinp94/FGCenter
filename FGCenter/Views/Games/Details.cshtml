@@ -4,13 +4,28 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Street Fighter 5</h1>  <img width="80" src="@Html.DisplayFor(model => model.Game.ImageUrl)" />
+
 
 <div>
-    <h4>GameDetailViewModel</h4>
     <hr />
-  
+    <p>
+        <a asp-controller="Posts" asp-action="Create">Submit A Post</a>
+    </p>
     <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Post.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Post.DatePosted)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Post.User.UserName)
+                </th>
+            </tr>
+        </thead>
         <tbody>
             @foreach (Post p in Model.GroupedPosts)
             {
@@ -19,31 +34,18 @@
                         @Html.DisplayFor(modelItem => p.Title)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => p.Text)
-                    </td>
-                    <td>
                         @Html.DisplayFor(modelItem => p.DatePosted)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.EditedDate)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => p.User.UserName)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => p.Game.GameId)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@p.PostId">Edit</a> |
+                        <a asp-controller="Posts" asp-action="Edit" asp-route-id="@p.PostId">Edit</a> |
                         <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.PostId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@p.PostId">Delete</a>
+                        <a asp-controller="Posts" asp-action="Delete" asp-route-id="@p.PostId">Delete</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
 </div>
