@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FGCenter.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190430180755_FGDatabase")]
-    partial class FGDatabase
+    [Migration("20190430201632_please")]
+    partial class please
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,7 +56,7 @@ namespace FGCenter.Migrations
                             EditedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PostId = 1,
                             Text = "Vtrigger 2 for bison is really good",
-                            UserId = "e799f447-63da-48a1-8719-94794c26c90d"
+                            UserId = "ec856ac5-f630-4e78-bf0d-9af30ca87699"
                         });
                 });
 
@@ -100,6 +100,8 @@ namespace FGCenter.Migrations
 
                     b.Property<int>("GameId");
 
+                    b.Property<int?>("Games");
+
                     b.Property<string>("Text");
 
                     b.Property<string>("Title");
@@ -109,7 +111,7 @@ namespace FGCenter.Migrations
 
                     b.HasKey("PostId");
 
-                    b.HasIndex("GameId");
+                    b.HasIndex("Games");
 
                     b.HasIndex("UserId");
 
@@ -124,7 +126,7 @@ namespace FGCenter.Migrations
                             GameId = 1,
                             Text = "Vtrigger 2 combos",
                             Title = "Bison Combos",
-                            UserId = "e799f447-63da-48a1-8719-94794c26c90d"
+                            UserId = "ec856ac5-f630-4e78-bf0d-9af30ca87699"
                         });
                 });
 
@@ -320,17 +322,17 @@ namespace FGCenter.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "e799f447-63da-48a1-8719-94794c26c90d",
+                            Id = "ec856ac5-f630-4e78-bf0d-9af30ca87699",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "16187378-675b-47c2-ba80-f78e778b2e8c",
+                            ConcurrencyStamp = "f5fc4154-4d21-4899-8552-36dc3959b6b7",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEIflBsUeP8MyjGwxB3VE+PUomV4NlKK1qAeI2Rwei98PN7URiYSlCrNUg+joyvgKig==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEImgZN3NWKsKLofQgYB7DMYKL5rU/NaWUsGYAZUnwB6kgj2fGNBYTK/dHEvsteqLcw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "aee6c3a4-890a-4866-8a17-d693b9f95060",
+                            SecurityStamp = "bfd46952-3a65-4138-baa0-5e2e69a36b15",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -357,8 +359,7 @@ namespace FGCenter.Migrations
                 {
                     b.HasOne("FGCenter.Models.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GameId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Games");
 
                     b.HasOne("FGCenter.Models.ApplicationUser", "User")
                         .WithMany("Posts")

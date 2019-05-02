@@ -38,7 +38,9 @@ namespace FGCenter.Data
                 .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<Comment>()
-                .HasOne(c => c.User).WithMany(u => u.Comments).OnDelete(DeleteBehavior.Restrict);
+                .HasOne(c => c.User)
+                .WithMany(u => u.Comments)
+                .OnDelete(DeleteBehavior.Restrict);
 
             ApplicationUser user = new ApplicationUser
             {
@@ -71,7 +73,7 @@ namespace FGCenter.Data
                     PostId = 1,
                     Title = "Bison Combos",
                     Text = "Vtrigger 2 combos",
-                    UserId =user.Id,
+                    UserId = user.Id,
                     GameId =1 }
             );
             modelBuilder.Entity<Comment>().HasData(

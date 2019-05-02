@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FGCenter.Migrations
 {
-    public partial class FGDatabase : Migration
+    public partial class please : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -184,17 +184,18 @@ namespace FGCenter.Migrations
                     DatePosted = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     EditedDate = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
+                    Games = table.Column<int>(nullable: true),
                     GameId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Post", x => x.PostId);
                     table.ForeignKey(
-                        name: "FK_Post_Game_GameId",
-                        column: x => x.GameId,
+                        name: "FK_Post_Game_Games",
+                        column: x => x.Games,
                         principalTable: "Game",
                         principalColumn: "GameId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Post_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -235,7 +236,7 @@ namespace FGCenter.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "FirstName", "ImageUrl", "LastName" },
-                values: new object[] { "e799f447-63da-48a1-8719-94794c26c90d", 0, "16187378-675b-47c2-ba80-f78e778b2e8c", "ApplicationUser", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEIflBsUeP8MyjGwxB3VE+PUomV4NlKK1qAeI2Rwei98PN7URiYSlCrNUg+joyvgKig==", null, false, "aee6c3a4-890a-4866-8a17-d693b9f95060", false, "admin@admin.com", "admin", "", "admin" });
+                values: new object[] { "ec856ac5-f630-4e78-bf0d-9af30ca87699", 0, "f5fc4154-4d21-4899-8552-36dc3959b6b7", "ApplicationUser", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEImgZN3NWKsKLofQgYB7DMYKL5rU/NaWUsGYAZUnwB6kgj2fGNBYTK/dHEvsteqLcw==", null, false, "bfd46952-3a65-4138-baa0-5e2e69a36b15", false, "admin@admin.com", "admin", "", "admin" });
 
             migrationBuilder.InsertData(
                 table: "Game",
@@ -244,13 +245,13 @@ namespace FGCenter.Migrations
 
             migrationBuilder.InsertData(
                 table: "Post",
-                columns: new[] { "PostId", "EditedDate", "GameId", "Text", "Title", "UserId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Vtrigger 2 combos", "Bison Combos", "e799f447-63da-48a1-8719-94794c26c90d" });
+                columns: new[] { "PostId", "EditedDate", "GameId", "Games", "Text", "Title", "UserId" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, "Vtrigger 2 combos", "Bison Combos", "ec856ac5-f630-4e78-bf0d-9af30ca87699" });
 
             migrationBuilder.InsertData(
                 table: "Comment",
                 columns: new[] { "CommentId", "EditedDate", "PostId", "Text", "UserId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Vtrigger 2 for bison is really good", "e799f447-63da-48a1-8719-94794c26c90d" });
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Vtrigger 2 for bison is really good", "ec856ac5-f630-4e78-bf0d-9af30ca87699" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -302,9 +303,9 @@ namespace FGCenter.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Post_GameId",
+                name: "IX_Post_Games",
                 table: "Post",
-                column: "GameId");
+                column: "Games");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_UserId",

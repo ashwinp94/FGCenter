@@ -7,15 +7,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FGCenter.Data;
 using FGCenter.Models;
+using FGCenter.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace FGCenter.Controllers
 {
     public class PostsController : Controller
     {
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
         private readonly ApplicationDbContext _context;
 
-        public PostsController(ApplicationDbContext context)
+        public PostsController(ApplicationDbContext context,
+                                UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -34,23 +42,30 @@ namespace FGCenter.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Post
-                .Include(p => p.Game)
-                .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
+            var model = new PostDetailViewModel();
+
+            var GroupedPosts = await _context.Comment
+                .Include(p => p.Post)
+                .Where(p => p.PostId == id)
+                .ToListAsync();
+
+            var game = await _context.Game
+                .Where(g => g.GameId == id).ToListAsync();
+
+            foreach (Game g in game)
             {
-                return NotFound();
+                model.Game = g;
             }
 
-            return View(post);
+            model.GroupedComments = GroupedPosts;
+
+            return View(model);
         }
 
         // GET: Posts/Create
         public IActionResult Create()
         {
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "GameId");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "Name");
             return View();
         }
 
@@ -61,14 +76,23 @@ namespace FGCenter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PostId,Title,Text,DatePosted,EditedDate,UserId,GameId")] Post post)
         {
+
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            post.User = user;
+            post.UserId = user.Id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(GamesController.Details), new { id = post.PostId });
             }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "GameId", post.GameId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
+
+
             return View(post);
         }
 
@@ -85,8 +109,6 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "GameId", post.GameId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
             return View(post);
         }
 
@@ -101,6 +123,16 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            post.User = user;
+            post.UserId = user.Id;
+
+            post.EditedDate = DateTime.Now;
 
             if (ModelState.IsValid)
             {
@@ -122,8 +154,7 @@ namespace FGCenter.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "GameId", post.GameId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
+            
             return View(post);
         }
 

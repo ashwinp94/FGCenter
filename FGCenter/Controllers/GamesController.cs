@@ -7,15 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FGCenter.Data;
 using FGCenter.Models;
+using FGCenter.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace FGCenter.Controllers
 {
     public class GamesController : Controller
     {
+
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+
+
         private readonly ApplicationDbContext _context;
 
-        public GamesController(ApplicationDbContext context)
+        public GamesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -32,15 +42,48 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
+            //CREATE A NEW GameDetailViewModel
+            var model = new GameDetailViewModel();
+
+            //GET GAME INFO
 
             var game = await _context.Game
-                .FirstOrDefaultAsync(m => m.GameId == id);
-            if (game == null)
+                .Where(g => g.GameId == id).ToListAsync();
+
+            foreach (Game g in game)
             {
-                return NotFound();
+                model.Game = g;
             }
 
-            return View(game);
+            //ADD POSTS TO THE MODEL
+            var GroupedPosts = await _context.Post
+                .Include(p=> p.User)
+                .Include(p => p.Game)
+                .Where(p => p.GameId == id)
+                .ToListAsync();
+
+            model.GroupedPosts = GroupedPosts;
+
+            //GET COMMENT COUNT
+            var CommentCount = await (
+                from p in _context.Post
+                from c in _context.Comment.Where(co => p.PostId == co.PostId).DefaultIfEmpty()
+                group new { p, c } by new { p.PostId, p.Title, p.DatePosted } into grouped
+                select new PostWithCommentCountViewModel
+                {
+                    NumberOfComments = grouped.Where(gr => gr.c != null).Count(),
+                    Post = new Post
+                    {
+                        PostId = grouped.Key.PostId,
+                        Title = grouped.Key.Title,
+                        DatePosted = grouped.Key.DatePosted,
+                    }
+                }).ToListAsync();
+
+            model.PostsWithCommentCount = CommentCount;
+
+            return View(model);
+           
         }
 
         // GET: Games/Create
