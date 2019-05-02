@@ -48,12 +48,9 @@ namespace FGCenter.Controllers
             //GET GAME INFO
 
             var game = await _context.Game
-                .Where(g => g.GameId == id).ToListAsync();
+                .Where(g => g.GameId == id).FirstOrDefaultAsync();
 
-            foreach (Game g in game)
-            {
-                model.Game = g;
-            }
+                model.Game = game;
 
             //ADD POSTS TO THE MODEL
             var GroupedPosts = await _context.Post

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FGCenter.Data;
 using FGCenter.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FGCenter.Controllers
 {
@@ -14,8 +15,13 @@ namespace FGCenter.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public CommentsController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+
+        public CommentsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
@@ -49,8 +55,6 @@ namespace FGCenter.Controllers
         // GET: Comments/Create
         public IActionResult Create()
         {
-            ViewData["PostId"] = new SelectList(_context.Post, "PostId", "UserId");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -59,16 +63,26 @@ namespace FGCenter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentId,Text,DatePosted,EditedDate,PostId,UserId")] Comment comment)
+        public async Task<IActionResult> Create([Bind("CommentId,Text,DatePosted,EditedDate,PostId,UserId")] int id, Comment comment)
         {
+
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            comment.User = user;
+            comment.UserId = user.Id;
+            comment.PostId = id;
+
             if (ModelState.IsValid)
             {
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostId"] = new SelectList(_context.Post, "PostId", "UserId", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", comment.UserId);
+            
+
             return View(comment);
         }
 
@@ -81,12 +95,12 @@ namespace FGCenter.Controllers
             }
 
             var comment = await _context.Comment.FindAsync(id);
+
             if (comment == null)
             {
                 return NotFound();
             }
-            ViewData["PostId"] = new SelectList(_context.Post, "PostId", "UserId", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", comment.UserId);
+ 
             return View(comment);
         }
 
@@ -101,6 +115,17 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            comment.User = user;
+            comment.UserId = user.Id;
+
+            comment.EditedDate = DateTime.Now;
+            
 
             if (ModelState.IsValid)
             {
@@ -122,8 +147,7 @@ namespace FGCenter.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PostId"] = new SelectList(_context.Post, "PostId", "UserId", comment.PostId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", comment.UserId);
+
             return View(comment);
         }
 

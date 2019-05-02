@@ -44,20 +44,25 @@ namespace FGCenter.Controllers
 
             var model = new PostDetailViewModel();
 
-            var GroupedPosts = await _context.Comment
+            var getpost = await _context.Post
+                 .Include(p=> p.User)
+                 .Where(p => p.PostId == id).FirstOrDefaultAsync();
+
+            model.Post = getpost;
+
+            var GroupedComment = await _context.Comment
                 .Include(p => p.Post)
+                .Include(p => p.User)
                 .Where(p => p.PostId == id)
                 .ToListAsync();
 
             var game = await _context.Game
-                .Where(g => g.GameId == id).ToListAsync();
+                .Where(g => g.GameId == id).FirstOrDefaultAsync();
 
-            foreach (Game g in game)
-            {
-                model.Game = g;
-            }
+            model.Game = game;
+            
 
-            model.GroupedComments = GroupedPosts;
+            model.GroupedComments = GroupedComment;
 
             return View(model);
         }
