@@ -109,8 +109,6 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "GameId", post.GameId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
             return View(post);
         }
 
@@ -125,6 +123,16 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
+
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
+
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            post.User = user;
+            post.UserId = user.Id;
+
+            post.EditedDate = DateTime.Now;
 
             if (ModelState.IsValid)
             {
@@ -146,8 +154,7 @@ namespace FGCenter.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GameId"] = new SelectList(_context.Game, "GameId", "GameId", post.GameId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
+            
             return View(post);
         }
 

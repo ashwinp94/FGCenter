@@ -30,31 +30,29 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
             @foreach (var p in Model.PostsWithCommentCount)
             {
+            <tr>
                 <td>
                     @Html.DisplayFor(modelItem => p.Post.Title)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => p.NumberOfComments)
                 </td>
-            }
-            @foreach (Post p in Model.GroupedPosts)
-            {
-                    <td>
-                        @Html.DisplayFor(modelItem => p.DatePosted)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.User.UserName)
-                    </td>
-                    <td>
-                        <a asp-controller="Posts" asp-action="Edit" asp-route-id="@p.PostId">Edit</a> |
-                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.PostId">View Comments</a> |
-                        <a asp-controller="Posts" asp-action="Delete" asp-route-id="@p.PostId">Delete</a>
-                    </td>
-            }
-                </tr>
+                <td>
+                    @Html.DisplayFor(modelItem => p.Post.DatePosted)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => p.Post.User.UserName)
+                </td>
+                <td>
+                    <a asp-controller="Posts" asp-action="Edit" asp-route-id="@p.Post.PostId">Edit</a> |
+                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.Post.PostId">View Comments</a> |
+                    <a asp-controller="Posts" asp-action="Delete" asp-route-id="@p.Post.PostId">Delete</a>
+                </td>
+            </tr>
+             }
+                
             </tbody>
         </table>
 </div>

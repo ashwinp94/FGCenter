@@ -45,6 +45,16 @@ namespace FGCenter.Controllers
             //CREATE A NEW GameDetailViewModel
             var model = new GameDetailViewModel();
 
+            //GET GAME INFO
+
+            var game = await _context.Game
+                .Where(g => g.GameId == id).ToListAsync();
+
+            foreach (Game g in game)
+            {
+                model.Game = g;
+            }
+
             //ADD POSTS TO THE MODEL
             var GroupedPosts = await _context.Post
                 .Include(p=> p.User)
@@ -54,28 +64,19 @@ namespace FGCenter.Controllers
 
             model.GroupedPosts = GroupedPosts;
 
-            var game = await _context.Game
-                .Where(g => g.GameId == id).ToListAsync();
-            
-            //GET GAME INFO
-            foreach(Game g in game)
-            {
-                model.Game = g;
-            }
-
             //GET COMMENT COUNT
             var CommentCount = await (
                 from p in _context.Post
-                join t in _context.Comment
-                on p.PostId equals t.PostId
-                group new { p, t } by new { t.PostId, p.Title } into grouped
+                from c in _context.Comment.Where(co => p.PostId == co.PostId).DefaultIfEmpty()
+                group new { p, c } by new { p.PostId, p.Title, p.DatePosted } into grouped
                 select new PostWithCommentCountViewModel
                 {
-                    NumberOfComments = grouped.Select(x => x.t.PostId).Count(),
+                    NumberOfComments = grouped.Where(gr => gr.c != null).Count(),
                     Post = new Post
                     {
                         PostId = grouped.Key.PostId,
                         Title = grouped.Key.Title,
+                        DatePosted = grouped.Key.DatePosted,
                     }
                 }).ToListAsync();
 
