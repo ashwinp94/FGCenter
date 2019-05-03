@@ -65,7 +65,7 @@ namespace FGCenter.Controllers
             var CommentCount = await (
                 from p in _context.Post
                 from c in _context.Comment.Where(co => p.PostId == co.PostId).DefaultIfEmpty()
-                group new { p, c } by new { p.PostId, p.Title, p.DatePosted } into grouped
+                group new { p, c } by new { p.PostId, p.Title, p.DatePosted, p.User, p.User.UserName } into grouped
                 select new PostWithCommentCountViewModel
                 {
                     NumberOfComments = grouped.Where(gr => gr.c != null).Count(),
@@ -74,6 +74,10 @@ namespace FGCenter.Controllers
                         PostId = grouped.Key.PostId,
                         Title = grouped.Key.Title,
                         DatePosted = grouped.Key.DatePosted,
+                        User = new ApplicationUser
+                        {
+                            UserName = grouped.Key.User.UserName
+                        }
                     }
                 }).ToListAsync();
 
