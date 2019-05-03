@@ -44,20 +44,29 @@ namespace FGCenter.Controllers
 
             var model = new PostDetailViewModel();
 
-            var GroupedPosts = await _context.Comment
+            var getpost = await _context.Post
+                 .Include(p=> p.User)
+                 .Where(p => p.PostId == id).FirstOrDefaultAsync();
+
+            model.Post = getpost;
+
+            var GroupedComment = await _context.Comment
                 .Include(p => p.Post)
+                .Include(p => p.User)
                 .Where(p => p.PostId == id)
                 .ToListAsync();
 
             var game = await _context.Game
-                .Where(g => g.GameId == id).ToListAsync();
+                .Where(g => g.GameId == id).FirstOrDefaultAsync();
 
-            foreach (Game g in game)
-            {
-                model.Game = g;
-            }
+            model.Game = game;         
 
-            model.GroupedComments = GroupedPosts;
+            model.GroupedComments = GroupedComment;
+
+            //GET USER
+
+            ApplicationUser user = await GetCurrentUserAsync();
+            model.User = user;
 
             return View(model);
         }
@@ -89,7 +98,7 @@ namespace FGCenter.Controllers
             {
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(GamesController.Details), new { id = post.PostId });
+                return RedirectToAction(nameof(Details), new { id = post.PostId });
             }
 
 
@@ -132,18 +141,24 @@ namespace FGCenter.Controllers
             post.User = user;
             post.UserId = user.Id;
 
-            post.EditedDate = DateTime.Now;
+            var PostBeingTrack = await _context.Post
+                .Where(p => p.PostId == id).FirstOrDefaultAsync();
 
-            if (ModelState.IsValid)
+            PostBeingTrack.EditedDate = DateTime.Now;
+            PostBeingTrack.Text = post.Text;
+            PostBeingTrack.Title = post.Title;
+            PostBeingTrack.DatePosted = post.DatePosted;
+
+            if (ModelState.IsValid && PostBeingTrack.UserId == user.Id)
             {
                 try
                 {
-                    _context.Update(post);
+                    _context.Update(PostBeingTrack);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.PostId))
+                    if (!PostExists(PostBeingTrack.PostId))
                     {
                         return NotFound();
                     }
@@ -155,7 +170,7 @@ namespace FGCenter.Controllers
                 return RedirectToAction(nameof(Index));
             }
             
-            return View(post);
+            return View(PostBeingTrack);
         }
 
         // GET: Posts/Delete/5
@@ -183,10 +198,19 @@ namespace FGCenter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ApplicationUser user = await GetCurrentUserAsync();
             var post = await _context.Post.FindAsync(id);
-            _context.Post.Remove(post);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if(user.Id == post.UserId)
+            {
+                _context.Post.Remove(post);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View();
+            }
         }
 
         private bool PostExists(int id)

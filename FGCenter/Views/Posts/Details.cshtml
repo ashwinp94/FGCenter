@@ -9,36 +9,55 @@
 <div>
     <h4>PostDetailViewModel</h4>
     <hr />
+    
+    <p>
+        <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
+    </p>
     <table class="table">
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Post.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Post.Text)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => modelItem.Post.DatePosted)
+            </td>
+            @if (Model.Post.User.Id == Model.User.Id)
+            {
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Post.PostId })
+                </td>
+            }
+        </tr>
         <tbody>
             @foreach (Comment p in Model.GroupedComments)
             {
-                <tr>
-                  
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => p.User.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => p.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => p.DatePosted)
+                </td>
+                @if (p.User.Id == Model.User.Id)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => p.Text)
+                        <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |
+                        <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.DatePosted)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.User.Id)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.Post.GameId)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@p.PostId">Edit</a> |
-                        <a asp-action="Details" asp-route-id="@p.PostId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@p.PostId">Delete</a>
-                    </td>
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>
-   
+
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-controller="Games" asp-action="Details" asp-route-id="@Model.Game.GameId">Back to List</a>
-</div>
+

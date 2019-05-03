@@ -19,8 +19,6 @@ namespace FGCenter.Controllers
 
         public Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-
-
         private readonly ApplicationDbContext _context;
 
         public GamesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
@@ -46,29 +44,16 @@ namespace FGCenter.Controllers
             var model = new GameDetailViewModel();
 
             //GET GAME INFO
-
             var game = await _context.Game
-                .Where(g => g.GameId == id).ToListAsync();
+                .Where(g => g.GameId == id).FirstOrDefaultAsync();
 
-            foreach (Game g in game)
-            {
-                model.Game = g;
-            }
-
-            //ADD POSTS TO THE MODEL
-            var GroupedPosts = await _context.Post
-                .Include(p=> p.User)
-                .Include(p => p.Game)
-                .Where(p => p.GameId == id)
-                .ToListAsync();
-
-            model.GroupedPosts = GroupedPosts;
+                model.Game = game;
 
             //GET COMMENT COUNT
             var CommentCount = await (
                 from p in _context.Post
                 from c in _context.Comment.Where(co => p.PostId == co.PostId).DefaultIfEmpty()
-                group new { p, c } by new { p.PostId, p.Title, p.DatePosted } into grouped
+                group new { p, c } by new { p.PostId, p.Title, p.DatePosted, p.User, p.User.UserName, p.User.Id } into grouped
                 select new PostWithCommentCountViewModel
                 {
                     NumberOfComments = grouped.Where(gr => gr.c != null).Count(),
@@ -77,10 +62,20 @@ namespace FGCenter.Controllers
                         PostId = grouped.Key.PostId,
                         Title = grouped.Key.Title,
                         DatePosted = grouped.Key.DatePosted,
+                        User = new ApplicationUser
+                        {
+                            Id = grouped.Key.User.Id,
+                            UserName = grouped.Key.User.UserName
+                        }
                     }
                 }).ToListAsync();
 
             model.PostsWithCommentCount = CommentCount;
+
+            //GET USER
+
+            ApplicationUser user = await GetCurrentUserAsync();
+            model.User = user;
 
             return View(model);
            

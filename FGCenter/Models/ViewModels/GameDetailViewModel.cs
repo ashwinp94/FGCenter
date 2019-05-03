@@ -7,7 +7,8 @@ namespace FGCenter.Models.ViewModels
 {
     public class GameDetailViewModel
     {
-        public List<Post> GroupedPosts { get; set; }
+
+        public ApplicationUser User { get; set; }
 
         public Post Post { get; set; }
 

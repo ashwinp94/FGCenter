@@ -21,14 +21,15 @@ namespace FGCenter.Models
 
         public DateTime EditedDate { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
-        [Required]
         public ApplicationUser User { get; set; }
 
-        [ForeignKey("Games")]
+        
         public Game Game { get; set; }
 
+        [ForeignKey("Games")]
         public int GameId { get; set; }
     }
 }
