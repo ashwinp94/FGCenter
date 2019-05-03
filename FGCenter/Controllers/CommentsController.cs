@@ -174,6 +174,7 @@ namespace FGCenter.Controllers
                 .Include(c => c.Post)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.CommentId == id);
+
             if (comment == null)
             {
                 return NotFound();

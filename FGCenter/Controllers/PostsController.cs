@@ -46,6 +46,7 @@ namespace FGCenter.Controllers
 
             var getpost = await _context.Post
                  .Include(p=> p.User)
+                 .Include(p => p.Game)
                  .Where(p => p.PostId == id).FirstOrDefaultAsync();
 
             model.Post = getpost;
@@ -55,11 +56,7 @@ namespace FGCenter.Controllers
                 .Include(p => p.User)
                 .Where(p => p.PostId == id)
                 .ToListAsync();
-
-            var game = await _context.Game
-                .Where(g => g.GameId == id).FirstOrDefaultAsync();
-
-            model.Game = game;         
+     
 
             model.GroupedComments = GroupedComment;
 
