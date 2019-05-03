@@ -109,7 +109,7 @@ namespace FGCenter.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CommentId,Text,DatePosted,EditedDate,PostId,UserId")] Comment comment)
+        public async Task<IActionResult> Edit(int? id, [Bind("CommentId,Text,DatePosted,EditedDate,PostId,UserId")] Comment comment)
         {
             if (id != comment.CommentId)
             {
@@ -124,14 +124,19 @@ namespace FGCenter.Controllers
             comment.User = user;
             comment.UserId = user.Id;
 
-            comment.EditedDate = DateTime.Now;
+            var CommentBeingTracked = await _context.Comment
+                .Where(c => c.CommentId == id).FirstOrDefaultAsync();
+
+            CommentBeingTracked.Text = comment.Text;
+
+            CommentBeingTracked.EditedDate = DateTime.Now;
             
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && CommentBeingTracked.UserId == user.Id)
             {
                 try
                 {
-                    _context.Update(comment);
+                    _context.Update(CommentBeingTracked);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -148,7 +153,7 @@ namespace FGCenter.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(comment);
+            return View(CommentBeingTracked);
         }
 
         // GET: Comments/Delete/5
@@ -176,10 +181,19 @@ namespace FGCenter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ApplicationUser user = await GetCurrentUserAsync();
             var comment = await _context.Comment.FindAsync(id);
-            _context.Comment.Remove(comment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (user.Id == comment.UserId)
+            {
+                _context.Comment.Remove(comment);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return View();
+            }
+
         }
 
         private bool CommentExists(int id)

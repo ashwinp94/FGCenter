@@ -46,9 +46,14 @@
                     @Html.DisplayFor(modelItem => p.Post.User.UserName)
                 </td>
                 <td>
-                    <a asp-controller="Posts" asp-action="Edit" asp-route-id="@p.Post.PostId">Edit</a> |
-                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.Post.PostId">View Comments</a> |
-                    <a asp-controller="Posts" asp-action="Delete" asp-route-id="@p.Post.PostId">Delete</a>
+                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.Post.PostId">View Comments</a> 
+                    @if(p.Post.User.Id == Model.User.Id)
+                    {
+                        <div>
+                            <a asp-controller="Posts" asp-action="Delete" asp-route-id="@p.Post.PostId">Delete</a> |
+                            <a asp-controller="Posts" asp-action="Edit" asp-route-id="@p.Post.PostId">Edit</a>
+                        </div>
+                    }
                 </td>
             </tr>
              }

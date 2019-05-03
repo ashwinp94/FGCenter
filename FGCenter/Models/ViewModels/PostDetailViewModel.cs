@@ -15,5 +15,7 @@ namespace FGCenter.Models.ViewModels
         public Post Post { get; set; }
 
         public Game Game { get; set; }
+
+        public ApplicationUser User { get; set; }
     }
 }
