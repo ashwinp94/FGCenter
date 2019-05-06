@@ -27,13 +27,6 @@ namespace FGCenter.Controllers
             _context = context;
         }
 
-        // GET: Posts
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Post.Include(p => p.Game).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
