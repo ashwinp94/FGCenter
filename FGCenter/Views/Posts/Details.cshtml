@@ -9,9 +9,14 @@
 <div>
     <h4>PostDetailViewModel</h4>
     <hr />
-    
+    @if(Model.User != null)
+    {
+        <p>
+            <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
+        </p>
+    }
     <p>
-        <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
+        <a asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">Back</a>
     </p>
     <table class="table">
         <tr>
@@ -27,7 +32,7 @@
             <td>
                 @Html.DisplayFor(modelItem => modelItem.Post.DatePosted)
             </td>
-            @if (Model.Post.User.Id == Model.User.Id)
+            @if (Model.User != null && Model.Post.User.Id == Model.User.Id)
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = Model.Post.PostId })
@@ -37,24 +42,24 @@
         <tbody>
             @foreach (Comment p in Model.GroupedComments)
             {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => p.User.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => p.Text)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => p.DatePosted)
-                </td>
-                @if (p.User.Id == Model.User.Id)
-                {
+                <tr>
                     <td>
-                        <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |
-                        <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
+                        @Html.DisplayFor(modelItem => p.User.UserName)
                     </td>
-                }
-            </tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => p.Text)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => p.DatePosted)
+                    </td>
+                    @if (Model.User != null && p.User.Id == Model.User.Id)
+                    {
+                        <td>
+                            <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |
+                            <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
+                        </td>
+                    }
+                </tr>
             }
         </tbody>
     </table>

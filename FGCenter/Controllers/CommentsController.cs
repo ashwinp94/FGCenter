@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using FGCenter.Data;
 using FGCenter.Models;
 using Microsoft.AspNetCore.Identity;
+using FGCenter.Models.ViewModels;
 
 namespace FGCenter.Controllers
 {
@@ -25,65 +26,43 @@ namespace FGCenter.Controllers
             _context = context;
         }
 
-        // GET: Comments
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Comment.Include(c => c.Post).Include(c => c.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
-        // GET: Comments/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var comment = await _context.Comment
-                .Include(c => c.Post)
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(m => m.CommentId == id);
-            if (comment == null)
-            {
-                return NotFound();
-            }
-
-            return View(comment);
-        }
-
         // GET: Comments/Create
-        public IActionResult Create()
+        public IActionResult Create(int id)
         {
-            return View();
+            var model = new CommentCreateViewModel();
+            var post =  _context.Post
+                .Where(c => c.PostId == id).FirstOrDefault();
+            model.Post = post;
+            model.Post.PostId = post.PostId;
+
+            return View(model);
         }
 
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CommentId,Text,DatePosted,EditedDate,PostId,UserId")] int id, Comment comment)
+        public async Task<IActionResult> Create(int id, CommentCreateViewModel model)
         {
 
-            ModelState.Remove("User");
-            ModelState.Remove("UserId");
+            ModelState.Remove("Comment.User");
+            ModelState.Remove("Comment.UserId");
 
             ApplicationUser user = await GetCurrentUserAsync();
 
-            comment.User = user;
-            comment.UserId = user.Id;
-            comment.PostId = id;
+            model.Comment.User = user;
+            model.Comment.UserId = user.Id;
+            model.Comment.PostId = id;
 
             if (ModelState.IsValid)
             {
-                _context.Add(comment);
+                _context.Add(model.Comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { id = model.Comment.PostId });
             }
             
 
-            return View(comment);
+            return View(model);
         }
 
         // GET: Comments/Edit/5
@@ -150,7 +129,7 @@ namespace FGCenter.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { id = CommentBeingTracked.PostId });
             }
 
             return View(CommentBeingTracked);
@@ -168,6 +147,7 @@ namespace FGCenter.Controllers
                 .Include(c => c.Post)
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(m => m.CommentId == id);
+
             if (comment == null)
             {
                 return NotFound();
@@ -187,11 +167,11 @@ namespace FGCenter.Controllers
             {
                 _context.Comment.Remove(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Games");
             }
             else
             {
-                return View();
+                return RedirectToAction("Index", "Games");
             }
 
         }

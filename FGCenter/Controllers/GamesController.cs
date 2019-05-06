@@ -30,7 +30,36 @@ namespace FGCenter.Controllers
         // GET: Games
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Game.ToListAsync());
+            var model = new GameIndexViewModel();
+
+            //get users
+            ApplicationUser user = await GetCurrentUserAsync();
+            model.User = user;
+
+            //get post counts
+            var PostsCount = await (
+                from g in _context.Game
+                from p in _context.Post.Where(co => g.GameId == co.GameId).DefaultIfEmpty()
+                group new { g, p } by new { g.GameId, g.Name, g.ImageUrl } into grouped
+                select new GamesWithPostCountViewModel
+                {
+                    PostCount = grouped.Where(gr => gr.p != null).Count(),
+                    Game = new Game
+                    {
+                        GameId = grouped.Key.GameId,
+                        Name = grouped.Key.Name,
+                        ImageUrl = grouped.Key.ImageUrl,
+                        //User = new ApplicationUser
+                        //{
+                        //    Id = grouped.Key.User.Id,
+                        //    UserName = grouped.Key.User.UserName
+                        //}
+                    }
+                }).ToListAsync();
+
+            model.GamesWithPostCount = PostsCount;
+
+            return View(model);
         }
 
         // GET: Games/Details/5
@@ -51,7 +80,7 @@ namespace FGCenter.Controllers
 
             //GET COMMENT COUNT
             var CommentCount = await (
-                from p in _context.Post
+                from p in _context.Post.Where(po => po.GameId == id)
                 from c in _context.Comment.Where(co => p.PostId == co.PostId).DefaultIfEmpty()
                 group new { p, c } by new { p.PostId, p.Title, p.DatePosted, p.User, p.User.UserName, p.User.Id } into grouped
                 select new PostWithCommentCountViewModel
@@ -177,10 +206,20 @@ namespace FGCenter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            ApplicationUser user = await GetCurrentUserAsync();
+
             var game = await _context.Game.FindAsync(id);
-            _context.Game.Remove(game);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+
+            if(user.UserName == "admin@admin.com")
+            {
+                _context.Game.Remove(game);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         private bool GameExists(int id)

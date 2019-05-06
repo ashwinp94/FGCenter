@@ -27,13 +27,6 @@ namespace FGCenter.Controllers
             _context = context;
         }
 
-        // GET: Posts
-        public async Task<IActionResult> Index()
-        {
-            var applicationDbContext = _context.Post.Include(p => p.Game).Include(p => p.User);
-            return View(await applicationDbContext.ToListAsync());
-        }
-
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -46,6 +39,7 @@ namespace FGCenter.Controllers
 
             var getpost = await _context.Post
                  .Include(p=> p.User)
+                 .Include(p => p.Game)
                  .Where(p => p.PostId == id).FirstOrDefaultAsync();
 
             model.Post = getpost;
@@ -55,11 +49,7 @@ namespace FGCenter.Controllers
                 .Include(p => p.User)
                 .Where(p => p.PostId == id)
                 .ToListAsync();
-
-            var game = await _context.Game
-                .Where(g => g.GameId == id).FirstOrDefaultAsync();
-
-            model.Game = game;         
+     
 
             model.GroupedComments = GroupedComment;
 
@@ -147,7 +137,6 @@ namespace FGCenter.Controllers
             PostBeingTrack.EditedDate = DateTime.Now;
             PostBeingTrack.Text = post.Text;
             PostBeingTrack.Title = post.Title;
-            PostBeingTrack.DatePosted = post.DatePosted;
 
             if (ModelState.IsValid && PostBeingTrack.UserId == user.Id)
             {
@@ -167,9 +156,10 @@ namespace FGCenter.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = post.PostId });
+
             }
-            
+
             return View(PostBeingTrack);
         }
 
@@ -205,11 +195,11 @@ namespace FGCenter.Controllers
             {
                 _context.Post.Remove(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Games");
             }
             else
             {
-                return View();
+                return RedirectToAction("Index", "Games");
             }
         }
 

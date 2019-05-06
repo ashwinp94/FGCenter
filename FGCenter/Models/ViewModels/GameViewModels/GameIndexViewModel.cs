@@ -5,15 +5,12 @@ using System.Threading.Tasks;
 
 namespace FGCenter.Models.ViewModels
 {
-    public class GameDetailViewModel
+    public class GameIndexViewModel
     {
-
         public ApplicationUser User { get; set; }
 
-        public Post Post { get; set; }
+        public List<GamesWithPostCountViewModel> GamesWithPostCount {get; set;}
 
-        public Game Game { get; set; }
-
-        public List<PostWithCommentCountViewModel> PostsWithCommentCount { get; set; }
+        public GamesWithPostCountViewModel Games { get; set; }
     }
 }
