@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    @if (Model.User.SecurityStamp == "bfd46952 - 3a65 - 4138 - baa0 - 5e2e69a36b15")
+    @if (Model.User.UserName == "admin@admin.com")
     {
         <a asp-action="Create">Create New</a>
     }
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => p.PostCount)
             </td>
             <td>
-                @if(Model.User.SecurityStamp == "bfd46952 - 3a65 - 4138 - baa0 - 5e2e69a36b15")
+                @if(Model.User.UserName == "admin@admin.com")
                 {
                   @Html.ActionLink("Edit", "Edit", new { id = p.Game.GameId }) 
                 }

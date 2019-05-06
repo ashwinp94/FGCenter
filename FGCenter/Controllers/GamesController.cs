@@ -80,7 +80,7 @@ namespace FGCenter.Controllers
 
             //GET COMMENT COUNT
             var CommentCount = await (
-                from p in _context.Post
+                from p in _context.Post.Where(po => po.GameId == id)
                 from c in _context.Comment.Where(co => p.PostId == co.PostId).DefaultIfEmpty()
                 group new { p, c } by new { p.PostId, p.Title, p.DatePosted, p.User, p.User.UserName, p.User.Id } into grouped
                 select new PostWithCommentCountViewModel
