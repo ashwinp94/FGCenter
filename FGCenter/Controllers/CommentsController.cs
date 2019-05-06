@@ -194,11 +194,11 @@ namespace FGCenter.Controllers
             {
                 _context.Comment.Remove(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Games");
             }
             else
             {
-                return View();
+                return RedirectToAction("Index", "Games");
             }
 
         }
