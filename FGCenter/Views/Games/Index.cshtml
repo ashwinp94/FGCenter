@@ -1,4 +1,4 @@
-﻿@model IEnumerable<FGCenter.Models.Game>
+﻿@model FGCenter.Models.ViewModels.GameIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -7,39 +7,45 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    @if (Model.User.SecurityStamp == "bfd46952 - 3a65 - 4138 - baa0 - 5e2e69a36b15")
+    {
+        <a asp-action="Create">Create New</a>
+    }
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Games.Game.Name)
             </th>
-            <td>
-                @Html.DisplayNameFor(model => model.ImageUrl)
-            </td>
             <th>
-                @Html.DisplayNameFor(model => model.DeveloperName)
+                @Html.DisplayNameFor(model => model.Games.Game.ImageUrl)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Games.PostCount)
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var p in Model.GamesWithPostCount)
+{
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => p.Game.Name)
             </td>
             <td>
-                <img width="60" src="@Html.DisplayFor(modelItem => item.ImageUrl)" />
+                <img width="60" src="@Html.DisplayFor(modelItem => p.Game.ImageUrl)" /> 
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DeveloperName)
+                @Html.DisplayFor(modelItem => p.PostCount)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.GameId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.GameId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.GameId">Delete</a>
+                @if(Model.User.SecurityStamp == "bfd46952 - 3a65 - 4138 - baa0 - 5e2e69a36b15")
+                {
+                  @Html.ActionLink("Edit", "Edit", new { id = p.Game.GameId }) 
+                }
+
+                @Html.ActionLink("Details", "Details", new { id= p.Game.GameId }) 
             </td>
         </tr>
 }

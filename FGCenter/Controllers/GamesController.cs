@@ -30,7 +30,36 @@ namespace FGCenter.Controllers
         // GET: Games
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Game.ToListAsync());
+            var model = new GameIndexViewModel();
+
+            //get users
+            ApplicationUser user = await GetCurrentUserAsync();
+            model.User = user;
+
+            //get post counts
+            var PostsCount = await (
+                from g in _context.Game
+                from p in _context.Post.Where(co => g.GameId == co.GameId).DefaultIfEmpty()
+                group new { g, p } by new { g.GameId, g.Name, g.ImageUrl } into grouped
+                select new GamesWithPostCountViewModel
+                {
+                    PostCount = grouped.Where(gr => gr.p != null).Count(),
+                    Game = new Game
+                    {
+                        GameId = grouped.Key.GameId,
+                        Name = grouped.Key.Name,
+                        ImageUrl = grouped.Key.ImageUrl,
+                        //User = new ApplicationUser
+                        //{
+                        //    Id = grouped.Key.User.Id,
+                        //    UserName = grouped.Key.User.UserName
+                        //}
+                    }
+                }).ToListAsync();
+
+            model.GamesWithPostCount = PostsCount;
+
+            return View(model);
         }
 
         // GET: Games/Details/5

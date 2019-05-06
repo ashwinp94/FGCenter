@@ -85,7 +85,7 @@ namespace FGCenter.Controllers
             {
                 _context.Add(model.Comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { id = model.Comment.PostId });
             }
             
 
@@ -156,7 +156,7 @@ namespace FGCenter.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { id = CommentBeingTracked.PostId });
             }
 
             return View(CommentBeingTracked);

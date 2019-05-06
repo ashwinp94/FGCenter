@@ -144,7 +144,6 @@ namespace FGCenter.Controllers
             PostBeingTrack.EditedDate = DateTime.Now;
             PostBeingTrack.Text = post.Text;
             PostBeingTrack.Title = post.Title;
-            PostBeingTrack.DatePosted = post.DatePosted;
 
             if (ModelState.IsValid && PostBeingTrack.UserId == user.Id)
             {
@@ -164,9 +163,10 @@ namespace FGCenter.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Details), new { id = post.PostId });
+
             }
-            
+
             return View(PostBeingTrack);
         }
 
