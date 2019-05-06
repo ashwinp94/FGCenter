@@ -9,10 +9,12 @@
 <div>
     <h4>PostDetailViewModel</h4>
     <hr />
-
-    <p>
-        <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
-    </p>
+    @if(Model.User != null)
+    {
+        <p>
+            <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
+        </p>
+    }
     <p>
         <a asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">Back</a>
     </p>
@@ -30,7 +32,7 @@
             <td>
                 @Html.DisplayFor(modelItem => modelItem.Post.DatePosted)
             </td>
-            @if (Model.Post.User.Id == Model.User.Id)
+            @if (Model.User != null && Model.Post.User.Id == Model.User.Id)
             {
                 <td>
                     @Html.ActionLink("Edit", "Edit", new { id = Model.Post.PostId })
@@ -50,7 +52,7 @@
                     <td>
                         @Html.DisplayFor(modelItem => p.DatePosted)
                     </td>
-                    @if (p.User.Id == Model.User.Id)
+                    @if (Model.User != null && p.User.Id == Model.User.Id)
                     {
                         <td>
                             <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |

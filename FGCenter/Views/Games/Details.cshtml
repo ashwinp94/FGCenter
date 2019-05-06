@@ -8,10 +8,13 @@
 
 
 <div>
+    @if (Model.User != null)
+    {
     <hr />
-    <p>
-        <a asp-controller="Posts" asp-action="Create">Submit A Post</a>
-    </p>
+        <p>
+            <a asp-controller="Posts" asp-action="Create">Submit A Post</a>
+        </p>
+    }
     <table class="table">
         <thead>
             <tr>
@@ -47,7 +50,7 @@
                 </td>
                 <td>
                     <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.Post.PostId">View Comments</a> 
-                    @if(p.Post.User.Id == Model.User.Id)
+                    @if (Model.User != null && p.Post.User.Id == Model.User.Id)
                     {
                         <div>
                             <a asp-controller="Posts" asp-action="Delete" asp-route-id="@p.Post.PostId">Delete</a> |

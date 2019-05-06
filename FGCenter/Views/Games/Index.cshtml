@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    @if (Model.User.UserName == "admin@admin.com")
+    @if (Model.User != null && Model.User.UserName == "admin@admin.com")
     {
         <a asp-action="Create">Create New</a>
     }
@@ -40,7 +40,7 @@
                 @Html.DisplayFor(modelItem => p.PostCount)
             </td>
             <td>
-                @if(Model.User.UserName == "admin@admin.com")
+                @if(Model.User != null && Model.User.UserName == "admin@admin.com")
                 {
                   @Html.ActionLink("Edit", "Edit", new { id = p.Game.GameId }) 
                 }
