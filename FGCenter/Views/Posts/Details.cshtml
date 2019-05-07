@@ -21,6 +21,9 @@
     <table class="table">
         <tr>
             <td>
+                <img width="30" src="@Html.DisplayFor(modelItem => modelItem.Post.User.ImageUrl)" />
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
             </td>
             <td>
@@ -42,24 +45,27 @@
         <tbody>
             @foreach (Comment p in Model.GroupedComments)
             {
-                <tr>
+            <tr>
+                <td>
+                    <img width="30" src= "@Html.DisplayFor(modelItem => p.User.ImageUrl)" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => p.User.UserName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => p.Text)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => p.DatePosted)
+                </td>
+                @if (Model.User != null && p.User.Id == Model.User.Id)
+                {
                     <td>
-                        @Html.DisplayFor(modelItem => p.User.UserName)
+                        <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |
+                        <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
                     </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.Text)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => p.DatePosted)
-                    </td>
-                    @if (Model.User != null && p.User.Id == Model.User.Id)
-                    {
-                        <td>
-                            <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |
-                            <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
-                        </td>
-                    }
-                </tr>
+                }
+            </tr>
             }
         </tbody>
     </table>
