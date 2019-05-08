@@ -4,66 +4,67 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>PostDetailViewModel</h4>
-    <hr />
-    @if(Model.User != null)
-    {
-        <p>
-            <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
-        </p>
-    }
-    <p>
-        <a asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">Back</a>
-    </p>
-    <table class="table">
-        <tr>
-            <td>
-                <img width="30" src="@Html.DisplayFor(modelItem => modelItem.Post.User.ImageUrl)" />
-            
-                @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
-            
+    <div class="postboxdiv">
+        <table class="postbox">
+            <h1 class="postheader">
                 @Html.DisplayFor(modelItem => modelItem.Post.Title)
-           
-                @Html.DisplayFor(modelItem => modelItem.Post.Text)
+            </h1>
+            <tr class="textboxforposts">
+                <td class="userbox">
+                    <img width="50" src="@Html.DisplayFor(modelItem => modelItem.Post.User.ImageUrl)" />
+                    @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
+                    @Html.DisplayFor(modelItem => modelItem.Post.User.DateCreated)
+                </td>
+                <td class="postbox1">
+                    @Html.DisplayFor(modelItem => modelItem.Post.Text)
+                </td>
 
-                @Html.DisplayFor(modelItem => modelItem.Post.DatePosted)
-            
+            </tr>
+        </table>
+        <p>
+            @if (Model.User != null)
+            {
+                <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
+
+            }
             @if (Model.User != null && Model.Post.User.Id == Model.User.Id)
             {
-                @Html.ActionLink("Edit", "Edit", new { id = Model.Post.PostId })
+                <a class="backbutton" asp-controller="Post" asp-route-id="@Model.Post.PostId" asp-action="Edit">Edit</a>
             }
-            </td>
-        </tr>
-        <tbody>
+            <a class="backbutton" asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">Back</a>
+        </p>
+    </div>
+    <hr style="border-color:white"/>
+    <div class="postboxdiv">
+
+    <table class="postbox">
+    <tbody>
             @foreach (Comment p in Model.GroupedComments)
             {
-            <tr>
-                <td>
+            <tr class="textboxforpost">
+                <td class="userbox">
                     <img width="30" src= "@Html.DisplayFor(modelItem => p.User.ImageUrl)" />
-                </td>
-                <td>
+
+
                     @Html.DisplayFor(modelItem => p.User.UserName)
                 </td>
-                <td>
+                <td class="postbox1">
+
                     @Html.DisplayFor(modelItem => p.Text)
-                </td>
-                <td>
+
                     @Html.DisplayFor(modelItem => p.DatePosted)
-                </td>
+
                 @if (Model.User != null && p.User.Id == Model.User.Id)
                 {
-                    <td>
-                        <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |
-                        <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
-                    </td>
+                    <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a>
+                    <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
                 }
+                </td>
             </tr>
             }
         </tbody>
     </table>
-
+    </div>
 </div>
 

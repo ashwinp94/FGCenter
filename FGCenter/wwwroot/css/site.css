@@ -58,6 +58,43 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+/*Custom Stlying*/
+
 .table{
     color:white;
+}
+
+.postboxdiv {
+    display: flex;
+    flex-wrap:wrap;
+}
+.postbox {
+    width: 100%;
+}
+.userbox {
+    border: 1px solid white;
+    padding: 20px;
+    background-color: #577399;
+    box-shadow: 1px 1px 1px 1px black;
+
+}
+
+.postbox1 {
+    border: 1px solid white;
+    background-color: #577399;
+    padding: 20px;
+    box-shadow: 1px 1px 1px 1px black;
+    width: 100%;
+}
+
+.backbutton {
+    padding-left: 100px
+}
+
+.textboxforpost {
+    margin-bottom:10em;
+}
+
+a {
+    color: red;
 }
