@@ -22,25 +22,20 @@
         <tr>
             <td>
                 <img width="30" src="@Html.DisplayFor(modelItem => modelItem.Post.User.ImageUrl)" />
-            </td>
-            <td>
+            
                 @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
-            </td>
-            <td>
+            
                 @Html.DisplayFor(modelItem => modelItem.Post.Title)
-            </td>
-            <td>
+           
                 @Html.DisplayFor(modelItem => modelItem.Post.Text)
-            </td>
-            <td>
+
                 @Html.DisplayFor(modelItem => modelItem.Post.DatePosted)
-            </td>
+            
             @if (Model.User != null && Model.Post.User.Id == Model.User.Id)
             {
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.Post.PostId })
-                </td>
+                @Html.ActionLink("Edit", "Edit", new { id = Model.Post.PostId })
             }
+            </td>
         </tr>
         <tbody>
             @foreach (Comment p in Model.GroupedComments)
