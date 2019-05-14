@@ -128,9 +128,7 @@ namespace FGCenter.Controllers
 
             ApplicationUser user = await GetCurrentUserAsync();
 
-            post.User = user;
-            post.UserId = user.Id;
-
+            
             var PostBeingTrack = await _context.Post
                 .Where(p => p.PostId == id).FirstOrDefaultAsync();
 
@@ -138,7 +136,7 @@ namespace FGCenter.Controllers
             PostBeingTrack.Text = post.Text;
             PostBeingTrack.Title = post.Title;
 
-            if (ModelState.IsValid && PostBeingTrack.UserId == user.Id)
+            if (user != null && ModelState.IsValid && PostBeingTrack.UserId == user.Id)
             {
                 try
                 {
@@ -191,7 +189,7 @@ namespace FGCenter.Controllers
             ApplicationUser user = await GetCurrentUserAsync();
             var post = await _context.Post.FindAsync(id);
 
-            if(user.Id == post.UserId)
+            if(user != null && user.Id == post.UserId)
             {
                 _context.Post.Remove(post);
                 await _context.SaveChangesAsync();

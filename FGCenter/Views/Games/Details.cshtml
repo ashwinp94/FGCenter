@@ -16,22 +16,6 @@
         </p>
     }
     <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Post.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PostWithComment.NumberOfComments)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Post.DatePosted)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Post.User.UserName)
-                </th>
-            </tr>
-        </thead>
         <tbody>
             @foreach (var p in Model.PostsWithCommentCount)
             {
@@ -40,16 +24,20 @@
                     @Html.DisplayFor(modelItem => p.Post.Title)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => p.NumberOfComments)
-                </td>
-                <td>
                     @Html.DisplayFor(modelItem => p.Post.DatePosted)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => p.Post.User.UserName)
                 </td>
                 <td>
-                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.Post.PostId">View Comments</a> 
+                    @if (p.NumberOfComments == 1)
+                    {
+                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.Post.PostId"> @Html.DisplayFor(modelItem => p.NumberOfComments) Comment</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@p.Post.PostId"> @Html.DisplayFor(modelItem => p.NumberOfComments) Comments</a>
+                    }
                     @if (Model.User != null && p.Post.User.Id == Model.User.Id)
                     {
                         <div>

@@ -1,20 +1,22 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
+.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
+  color:black;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 @media (min-width: 768px) {
   html {
     font-size: 16px;
+    color:white;
   }
 }
 
@@ -29,7 +31,7 @@ html {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
-button.accept-policy {
+.accept-policy {
   font-size: 1rem;
   line-height: inherit;
 }
@@ -42,8 +44,10 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    background-color: #495867;
+    color:white;
+    margin-bottom: 60px;
 }
 .footer {
   position: absolute;
@@ -53,4 +57,62 @@ body {
   /* Set the fixed height of the footer here */
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
+}
+
+/*Custom Stlying*/
+
+.table{
+    color:white;
+}
+
+.postboxdiv {
+    display: flex;
+    flex-wrap:wrap;
+}
+.postbox {
+    width: 100%;
+}
+.userbox {
+    border: 1px solid white;
+    padding: 20px;
+    background-color: #577399;
+    box-shadow: 1px 1px 1px 1px black;
+
+}
+
+.postbox1 {
+    border: 1px solid white;
+    background-color: #577399;
+    padding: 20px;
+    box-shadow: 1px 1px 1px 1px black;
+    width: 100%;
+}
+
+postheader{
+    margin-bottom: 10em;
+}
+
+.backbutton {
+    padding-left: 100px
+}
+a {
+    color: lightblue;
+}
+
+.text-muted{
+    color:white !important;
+}
+
+.postbox{
+    margin-bottom:10px;
+}
+
+.userbuttons{
+    padding-top:10px;
+    font-size:small;
+}
+
+.userbuttons1 {
+    font-size: small;
+    padding-left: 20px;
 }

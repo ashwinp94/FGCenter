@@ -25,6 +25,8 @@ namespace FGCenter.Models
         public string ImageUrl { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         [Display(Name = "Date Created")]
         public DateTime DateCreated { get; set; }
 

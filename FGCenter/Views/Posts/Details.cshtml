@@ -4,71 +4,72 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>PostDetailViewModel</h4>
-    <hr />
-    @if(Model.User != null)
-    {
+    <div class="postboxdiv">
+        <table class="postbox">
+            
+            <tr class="textboxforposts">
+                <td class="userbox">
+                    <img width="50" src="@Html.DisplayFor(modelItem => modelItem.Post.User.ImageUrl)" />
+                    @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
+                    <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => modelItem.Post.User.DateCreated)</small></p>
+                </td>
+                <td class="postbox1">
+                    <h1 class="postheader">
+                        @Html.DisplayFor(modelItem => modelItem.Post.Title)
+                    </h1>
+                    @Html.DisplayFor(modelItem => modelItem.Post.Text)
+                </td>
+
+            </tr>
+        </table>
         <p>
-            <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
-        </p>
-    }
-    <p>
-        <a asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">Back</a>
-    </p>
-    <table class="table">
-        <tr>
-            <td>
-                <img width="30" src="@Html.DisplayFor(modelItem => modelItem.Post.User.ImageUrl)" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.Post.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.Post.Text)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => modelItem.Post.DatePosted)
-            </td>
+            @if (Model.User != null)
+            {
+                <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
+
+            }
             @if (Model.User != null && Model.Post.User.Id == Model.User.Id)
             {
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.Post.PostId })
-                </td>
+                <a class="backbutton" asp-controller="Post" asp-route-id="@Model.Post.PostId" asp-action="Edit">Edit</a>
             }
-        </tr>
-        <tbody>
+            <a class="backbutton" asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">Back</a>
+        </p>
+    </div>
+    <hr style="border-color:white"/>
+    <div class="postboxdiv">
+
             @foreach (Comment p in Model.GroupedComments)
             {
-            <tr>
-                <td>
-                    <img width="30" src= "@Html.DisplayFor(modelItem => p.User.ImageUrl)" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => p.User.UserName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => p.Text)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => p.DatePosted)
-                </td>
-                @if (Model.User != null && p.User.Id == Model.User.Id)
-                {
-                    <td>
-                        <a asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a> |
-                        <a asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
+        <table class="postbox">
+            <tbody>
+                <tr class="textboxforpost">
+                    <td class="userbox">
+                        <img width="50" src="@Html.DisplayFor(modelItem => p.User.ImageUrl)" />
+
+
+                        @Html.DisplayFor(modelItem => p.User.UserName)
+                        <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => p.User.DateCreated)</small></p>
                     </td>
-                }
-            </tr>
+                    <td class="postbox1">
+
+
+                        @Html.DisplayFor(modelItem => p.Text)
+
+
+                        <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => p.DatePosted)</small></p>
+
+                        @if (Model.User != null && p.User.Id == Model.User.Id)
+                        {
+                            <a class="userbuttons" asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">Edit</a>
+                            <a class="userbuttons1" asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">Delete</a>
+                        }
+                    </td>
+                </tr>
+            </tbody>
+            <hr style="border-color:white" />
+        </table>        
             }
-        </tbody>
-    </table>
 
+    </div>
 </div>
-
