@@ -17,7 +17,7 @@
                 <h1 class="postheader">
                     @Html.DisplayFor(modelItem => modelItem.Post.Title)
                 </h1>
-                <p class="card-text"><small class="text-muted dateposttext">@Html.DisplayFor(modelItem => modelItem.Post.DatePosted)</small></p>
+                <p class="dateposttext">@Html.DisplayFor(modelItem => modelItem.Post.DatePosted)</p>
 
                 <td class="postbox1">
                     @Html.DisplayFor(modelItem => modelItem.Post.Text)
@@ -40,7 +40,7 @@
                         <img width="40" src="~/images/edit.png" />
                     </a>
                 }
-                <a class="backbutton" asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">
+                <a class="backbutton back" asp-controller="Games" asp-route-id="@Model.Post.Game.GameId" asp-action="Details">
                     <img width="33" src="~/images/back.jpg" />
                 </a>
             </div>
@@ -51,7 +51,7 @@
 
             @foreach (Comment p in Model.GroupedComments)
             {
-        <table class="postbox1">
+        <table class="postbox1 threadbox">
             <tbody>
                 <tr class="textboxforpost">
                     <td class="userbox">
@@ -67,7 +67,7 @@
                         @Html.DisplayFor(modelItem => p.Text)
 
 
-                        <p class="card-text"><small class="text-muted datetext">@Html.DisplayFor(modelItem => p.DatePosted)</small></p>
+                        <small class="text-muted datetext">@Html.DisplayFor(modelItem => p.DatePosted)</small>
 
                         <div class="buttonarea">
 
