@@ -49,17 +49,20 @@ namespace FGCenter.Controllers
                         GameId = grouped.Key.GameId,
                         Name = grouped.Key.Name,
                         ImageUrl = grouped.Key.ImageUrl,
-                        //User = new ApplicationUser
-                        //{
-                        //    Id = grouped.Key.User.Id,
-                        //    UserName = grouped.Key.User.UserName
-                        //}
                     }
                 }).ToListAsync();
 
             model.GamesWithPostCount = PostsCount;
 
             return View(model);
+        }
+
+        //navbar view
+        public async Task<IActionResult> Navbar()
+        {
+            var gamesList = await _context.Game.ToListAsync();
+
+            return PartialView(gamesList);
         }
 
         // GET: Games/Details/5
@@ -69,6 +72,7 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
+
             //CREATE A NEW GameDetailViewModel
             var model = new GameDetailViewModel();
 
@@ -123,7 +127,9 @@ namespace FGCenter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GameId,Name,ImageUrl,DeveloperName")] Game game)
         {
-            if (ModelState.IsValid)
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            if (user != null && user.UserName == "admin@admin.com" && ModelState.IsValid)
             {
                 _context.Add(game);
                 await _context.SaveChangesAsync();
@@ -159,8 +165,9 @@ namespace FGCenter.Controllers
             {
                 return NotFound();
             }
+            ApplicationUser user = await GetCurrentUserAsync();
 
-            if (ModelState.IsValid)
+            if (user != null && user.UserName =="admin@admin.com" && ModelState.IsValid)
             {
                 try
                 {
@@ -181,45 +188,6 @@ namespace FGCenter.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(game);
-        }
-
-        // GET: Games/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var game = await _context.Game
-                .FirstOrDefaultAsync(m => m.GameId == id);
-            if (game == null)
-            {
-                return NotFound();
-            }
-
-            return View(game);
-        }
-
-        // POST: Games/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            ApplicationUser user = await GetCurrentUserAsync();
-
-            var game = await _context.Game.FindAsync(id);
-
-            if(user.UserName == "admin@admin.com")
-            {
-                _context.Game.Remove(game);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            else
-            {
-                return RedirectToAction(nameof(Index));
-            }
         }
 
         private bool GameExists(int id)

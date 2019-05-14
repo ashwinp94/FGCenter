@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace FGCenter.Migrations
 {
-    public partial class please : Migration
+    public partial class navbar : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -60,6 +60,7 @@ namespace FGCenter.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(nullable: true),
                     ImageUrl = table.Column<string>(nullable: true),
+                    ShortenedName = table.Column<string>(nullable: true),
                     DeveloperName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -184,18 +185,17 @@ namespace FGCenter.Migrations
                     DatePosted = table.Column<DateTime>(nullable: false, defaultValueSql: "GETDATE()"),
                     EditedDate = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
-                    Games = table.Column<int>(nullable: true),
                     GameId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Post", x => x.PostId);
                     table.ForeignKey(
-                        name: "FK_Post_Game_Games",
-                        column: x => x.Games,
+                        name: "FK_Post_Game_GameId",
+                        column: x => x.GameId,
                         principalTable: "Game",
                         principalColumn: "GameId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Post_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -236,22 +236,22 @@ namespace FGCenter.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Discriminator", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName", "FirstName", "ImageUrl", "LastName" },
-                values: new object[] { "ec856ac5-f630-4e78-bf0d-9af30ca87699", 0, "f5fc4154-4d21-4899-8552-36dc3959b6b7", "ApplicationUser", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEImgZN3NWKsKLofQgYB7DMYKL5rU/NaWUsGYAZUnwB6kgj2fGNBYTK/dHEvsteqLcw==", null, false, "bfd46952-3a65-4138-baa0-5e2e69a36b15", false, "admin@admin.com", "admin", "", "admin" });
+                values: new object[] { "d6b17004-daba-4255-9cfa-3091b18bdb27", 0, "932ce3bc-4730-4453-96cd-7c1d4f314d41", "ApplicationUser", "admin@admin.com", true, false, null, "ADMIN@ADMIN.COM", "ADMIN@ADMIN.COM", "AQAAAAEAACcQAAAAEN3fiZg9W6Gk734uawIJUfq4PO5tDUrLfqWz6ZjlBEJoWzd2y74bx2l4TQh9V0hn8g==", null, false, "f0350937-19a0-42ce-b249-a064065c76e6", false, "admin@admin.com", "admin", "https://streetfighter.com/wp-content/uploads/2015/10/facebook-featured.jpg", "admin" });
 
             migrationBuilder.InsertData(
                 table: "Game",
-                columns: new[] { "GameId", "DeveloperName", "ImageUrl", "Name" },
-                values: new object[] { 1, "Capcom", "https://streetfighter.com/wp-content/uploads/2017/12/sfvae-logo.png", "Street Fighter V" });
+                columns: new[] { "GameId", "DeveloperName", "ImageUrl", "Name", "ShortenedName" },
+                values: new object[] { 1, "Capcom", "https://streetfighter.com/wp-content/uploads/2017/12/sfvae-logo.png", "Street Fighter V", "SFV" });
 
             migrationBuilder.InsertData(
                 table: "Post",
-                columns: new[] { "PostId", "EditedDate", "GameId", "Games", "Text", "Title", "UserId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, null, "Vtrigger 2 combos", "Bison Combos", "ec856ac5-f630-4e78-bf0d-9af30ca87699" });
+                columns: new[] { "PostId", "EditedDate", "GameId", "Text", "Title", "UserId" },
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Vtrigger 2 combos", "Bison Combos", "d6b17004-daba-4255-9cfa-3091b18bdb27" });
 
             migrationBuilder.InsertData(
                 table: "Comment",
                 columns: new[] { "CommentId", "EditedDate", "PostId", "Text", "UserId" },
-                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Vtrigger 2 for bison is really good", "ec856ac5-f630-4e78-bf0d-9af30ca87699" });
+                values: new object[] { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, "Vtrigger 2 for bison is really good", "d6b17004-daba-4255-9cfa-3091b18bdb27" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -303,9 +303,9 @@ namespace FGCenter.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Post_Games",
+                name: "IX_Post_GameId",
                 table: "Post",
-                column: "Games");
+                column: "GameId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Post_UserId",

@@ -16,19 +16,6 @@
         </p>
     }
     <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Post.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Post.DatePosted)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Post.User.UserName)
-                </th>
-            </tr>
-        </thead>
         <tbody>
             @foreach (var p in Model.PostsWithCommentCount)
             {

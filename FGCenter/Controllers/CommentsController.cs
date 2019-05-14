@@ -100,9 +100,6 @@ namespace FGCenter.Controllers
 
             ApplicationUser user = await GetCurrentUserAsync();
 
-            comment.User = user;
-            comment.UserId = user.Id;
-
             var CommentBeingTracked = await _context.Comment
                 .Where(c => c.CommentId == id).FirstOrDefaultAsync();
 
@@ -111,7 +108,7 @@ namespace FGCenter.Controllers
             CommentBeingTracked.EditedDate = DateTime.Now;
             
 
-            if (ModelState.IsValid && CommentBeingTracked.UserId == user.Id)
+            if (user != null && ModelState.IsValid && CommentBeingTracked.UserId == user.Id)
             {
                 try
                 {
@@ -163,7 +160,7 @@ namespace FGCenter.Controllers
         {
             ApplicationUser user = await GetCurrentUserAsync();
             var comment = await _context.Comment.FindAsync(id);
-            if (user.Id == comment.UserId)
+            if (user!= null && user.Id == comment.UserId)
             {
                 _context.Comment.Remove(comment);
                 await _context.SaveChangesAsync();

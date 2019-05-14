@@ -48,7 +48,7 @@ namespace FGCenter.Data
                 LastName = "admin",
                 UserName = "admin@admin.com",
                 NormalizedUserName = "ADMIN@ADMIN.COM",
-                ImageUrl = "",
+                ImageUrl = "https://streetfighter.com/wp-content/uploads/2015/10/facebook-featured.jpg",
                 Email = "admin@admin.com",
                 NormalizedEmail = "ADMIN@ADMIN.COM",
                 EmailConfirmed = true,
@@ -64,6 +64,7 @@ namespace FGCenter.Data
                new Game {
                    GameId = 1,
                    Name = "Street Fighter V",
+                   ShortenedName = "SFV",
                    ImageUrl = "https://streetfighter.com/wp-content/uploads/2017/12/sfvae-logo.png",
                    DeveloperName = "Capcom" }
             );

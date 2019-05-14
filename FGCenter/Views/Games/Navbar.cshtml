@@ -1,0 +1,8 @@
+﻿@model IEnumerable<FGCenter.Models.Game>
+
+@foreach (var item in Model) {
+    <li>
+        <a asp-controller="Posts" asp-action="Delete" asp-route-id="@item.GameId">@Html.DisplayFor(modelItem => item.ShortenedName)</a> 
+    </li>
+}
+   

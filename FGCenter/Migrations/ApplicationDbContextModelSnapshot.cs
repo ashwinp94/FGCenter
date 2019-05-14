@@ -54,7 +54,7 @@ namespace FGCenter.Migrations
                             EditedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             PostId = 1,
                             Text = "Vtrigger 2 for bison is really good",
-                            UserId = "ec856ac5-f630-4e78-bf0d-9af30ca87699"
+                            UserId = "d6b17004-daba-4255-9cfa-3091b18bdb27"
                         });
                 });
 
@@ -70,6 +70,8 @@ namespace FGCenter.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("ShortenedName");
+
                     b.HasKey("GameId");
 
                     b.ToTable("Game");
@@ -80,7 +82,8 @@ namespace FGCenter.Migrations
                             GameId = 1,
                             DeveloperName = "Capcom",
                             ImageUrl = "https://streetfighter.com/wp-content/uploads/2017/12/sfvae-logo.png",
-                            Name = "Street Fighter V"
+                            Name = "Street Fighter V",
+                            ShortenedName = "SFV"
                         });
                 });
 
@@ -98,8 +101,6 @@ namespace FGCenter.Migrations
 
                     b.Property<int>("GameId");
 
-                    b.Property<int?>("Games");
-
                     b.Property<string>("Text");
 
                     b.Property<string>("Title");
@@ -109,7 +110,7 @@ namespace FGCenter.Migrations
 
                     b.HasKey("PostId");
 
-                    b.HasIndex("Games");
+                    b.HasIndex("GameId");
 
                     b.HasIndex("UserId");
 
@@ -124,7 +125,7 @@ namespace FGCenter.Migrations
                             GameId = 1,
                             Text = "Vtrigger 2 combos",
                             Title = "Bison Combos",
-                            UserId = "ec856ac5-f630-4e78-bf0d-9af30ca87699"
+                            UserId = "d6b17004-daba-4255-9cfa-3091b18bdb27"
                         });
                 });
 
@@ -320,22 +321,22 @@ namespace FGCenter.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ec856ac5-f630-4e78-bf0d-9af30ca87699",
+                            Id = "d6b17004-daba-4255-9cfa-3091b18bdb27",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f5fc4154-4d21-4899-8552-36dc3959b6b7",
+                            ConcurrencyStamp = "932ce3bc-4730-4453-96cd-7c1d4f314d41",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEImgZN3NWKsKLofQgYB7DMYKL5rU/NaWUsGYAZUnwB6kgj2fGNBYTK/dHEvsteqLcw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEN3fiZg9W6Gk734uawIJUfq4PO5tDUrLfqWz6ZjlBEJoWzd2y74bx2l4TQh9V0hn8g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "bfd46952-3a65-4138-baa0-5e2e69a36b15",
+                            SecurityStamp = "f0350937-19a0-42ce-b249-a064065c76e6",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com",
                             DateCreated = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "admin",
-                            ImageUrl = "",
+                            ImageUrl = "https://streetfighter.com/wp-content/uploads/2015/10/facebook-featured.jpg",
                             LastName = "admin"
                         });
                 });
@@ -357,7 +358,8 @@ namespace FGCenter.Migrations
                 {
                     b.HasOne("FGCenter.Models.Game", "Game")
                         .WithMany()
-                        .HasForeignKey("Games");
+                        .HasForeignKey("GameId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FGCenter.Models.ApplicationUser", "User")
                         .WithMany("Posts")

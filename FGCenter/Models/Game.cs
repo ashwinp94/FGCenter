@@ -13,6 +13,8 @@ namespace FGCenter.Models
 
         public string ImageUrl { get; set; }
 
+        public string ShortenedName { get; set; }
+
         public string DeveloperName { get; set; }
     }
 }
