@@ -6,6 +6,17 @@
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="wwwroot\NewFolder1\**" />
+    <Compile Remove="wwwroot\NewFolder\**" />
+    <Content Remove="wwwroot\NewFolder1\**" />
+    <Content Remove="wwwroot\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder1\**" />
+    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+    <None Remove="wwwroot\NewFolder1\**" />
+    <None Remove="wwwroot\NewFolder\**" />
+  </ItemGroup>
+
 
 
   <ItemGroup>
@@ -14,13 +25,6 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
-  </ItemGroup>
-
-
-
-  <ItemGroup>
-    <Folder Include="wwwroot\NewFolder1\" />
-    <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>
 
 </Project>

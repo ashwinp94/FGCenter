@@ -45,8 +45,8 @@ html {
 
 body {
     /* Margin bottom by footer height */
-    background-color: #495867;
-    color:white;
+    background-color: black;
+    color: white;
     margin-bottom: 60px;
 }
 .footer {
@@ -59,7 +59,7 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
-/*Custom Stlying*/
+/*Custom Stlying for Post view*/
 
 .table{
     color:white;
@@ -72,31 +72,44 @@ body {
 .postbox {
     width: 100%;
 }
-.userbox {
-    border: 1px solid white;
-    padding: 20px;
-    background-color: #577399;
+.userbox {   
     box-shadow: 1px 1px 1px 1px black;
+    border-radius:12px;
+    color:white;
 
 }
 
 .postbox1 {
-    border: 1px solid white;
-    background-color: #577399;
+    color: white;
     padding: 20px;
     box-shadow: 1px 1px 1px 1px black;
     width: 100%;
+    border-radius: 12px;
 }
 
-postheader{
-    margin-bottom: 10em;
+.dateposttext {
+    margin-left:600px;
+}
+
+.postheader {
+    padding-left:155px;
+}
+
+.userbuttons1 {
+    margin-left: 850px;
 }
 
 .backbutton {
-    padding-left: 100px
+    margin-left: 20px;
 }
+
 a {
-    color: lightblue;
+    color: lightgrey;
+}
+
+
+.datetext {
+    margin-left: 860px;
 }
 
 .text-muted{
@@ -104,15 +117,28 @@ a {
 }
 
 .postbox{
-    margin-bottom:10px;
+    margin-bottom:20px;
 }
 
-.userbuttons{
-    padding-top:10px;
-    font-size:small;
+.buttonarea{
+    margin-left:51.5em;
 }
 
-.userbuttons1 {
+.userbuttons {
+    margin-left: 20px;
+    margin-top: 10px;
     font-size: small;
-    padding-left: 20px;
 }
+
+.commentpostbox{
+    padding-top:50px;
+}
+
+.back{
+    margin-left:8px;
+}
+
+
+
+/*Custom Stlying for games view*/
+
