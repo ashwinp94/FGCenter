@@ -27,6 +27,13 @@ namespace FGCenter.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> YourPosts()
+        {
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            return View(await _context.Post.Where(p => p.UserId == user.Id).ToListAsync());
+        }
+
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {

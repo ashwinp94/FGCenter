@@ -71,28 +71,28 @@ body {
 }
 .postbox {
     width: 100%;
+    margin-bottom: 20px;
 }
-.userbox {   
+.userbox {
     box-shadow: 1px 1px 1px 1px black;
-    border-radius:12px;
-    color:white;
-
+    border-radius: 12px;
+    color: white;
+    padding-left: 2rem;
+    padding-top: 20px;
+    border-left: .1px solid #404040;
 }
 
 .postbox1 {
     color: white;
-    padding: 20px;
     box-shadow: 1px 1px 1px 1px black;
     width: 100%;
     border-radius: 12px;
+    padding-top:20px;
+    padding-right: 2em;
 }
 
 .dateposttext {
-    margin-left:600px;
-}
-
-.postheader {
-    padding-left:155px;
+    margin-top:600px;
 }
 
 .userbuttons1 {
@@ -109,24 +109,15 @@ a {
 
 
 .datetext {
-    margin-left: 860px;
+    margin-top: 100px;
 }
 
 .text-muted{
     color:white !important;
 }
 
-.postbox{
-    margin-bottom:20px;
-}
-
-.buttonarea{
-    margin-left:51.5em;
-}
 
 .userbuttons {
-    margin-left: 20px;
-    margin-top: 10px;
     font-size: small;
 }
 
@@ -137,8 +128,6 @@ a {
 .back{
     margin-left:8px;
 }
-
-
 
 /*Custom Stlying for games view*/
 

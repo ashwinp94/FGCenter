@@ -9,25 +9,24 @@
         <table class="postbox">
 
             <tr class="textboxforposts">
+                
+                <h1 class="postheader">
+                    @Html.DisplayFor(modelItem => modelItem.Post.Title)
+                </h1>
+                <td class="postbox1">
+                    @Html.DisplayFor(modelItem => modelItem.Post.Text)
+                </td>
                 <td class="userbox">
                     <img width="50" src="@Html.DisplayFor(modelItem => modelItem.Post.User.ImageUrl)" />
                     @Html.DisplayFor(modelItem => modelItem.Post.User.UserName)
                     <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => modelItem.Post.User.DateCreated)</small></p>
-                </td>
-                <h1 class="postheader">
-                    @Html.DisplayFor(modelItem => modelItem.Post.Title)
-                </h1>
-                <p class="dateposttext">@Html.DisplayFor(modelItem => modelItem.Post.DatePosted)</p>
-
-                <td class="postbox1">
-                    @Html.DisplayFor(modelItem => modelItem.Post.Text)
                 </td>
 
             </tr>
         </table>
 
         <p>
-       
+
             @if (Model.User != null)
             {
                 <a asp-controller="Comments" asp-route-id="@Model.Post.PostId" asp-action="Create">Submit A Comment</a>
@@ -46,46 +45,49 @@
             </div>
         </p>
     </div>
-    <hr style="border-color:white"/>
+    <hr style="border-color:white" />
     <div class="postboxdiv">
 
-            @foreach (Comment p in Model.GroupedComments)
-            {
-        <table class="postbox1 threadbox">
-            <tbody>
-                <tr class="textboxforpost">
-                    <td class="userbox">
-                        <img width="50" src="@Html.DisplayFor(modelItem => p.User.ImageUrl)" />
+        @foreach (Comment p in Model.GroupedComments)
+        {
+            <table class="postbox1 threadbox">
+                <tbody>
+                    <tr class="textboxforpost">
+
+                        <td class="postbox1 commentpostbox">
 
 
-                        @Html.DisplayFor(modelItem => p.User.UserName)
-                        <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => p.User.DateCreated)</small></p>
-                    </td>
-                    <td class="postbox1 commentpostbox">
+                            @Html.DisplayFor(modelItem => p.Text)
+                            <p>
+
+                            <small class="text-muted datetext">@Html.DisplayFor(modelItem => p.DatePosted)</small>
+                            </p>
+
+                        <td class="userbox">
+                            <img width="40" src="@Html.DisplayFor(modelItem => p.User.ImageUrl)" />
 
 
-                        @Html.DisplayFor(modelItem => p.Text)
-
-
-                        <small class="text-muted datetext">@Html.DisplayFor(modelItem => p.DatePosted)</small>
-
+                            @Html.DisplayFor(modelItem => p.User.UserName)
+                            <p class="card-text"><small class="text-muted">@Html.DisplayFor(modelItem => p.User.DateCreated)</small></p>
                         <div class="buttonarea">
 
-                        @if (Model.User != null && p.User.Id == Model.User.Id)
-                        {
-                            <a class="userbuttons" asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">
-                                <img width="40" src="~/images/edit.png" />
-                            </a>
-                            <a class="userbuttons" asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">
-                                <img width="27" src="~/images/delete.png" />
-                            </a>
-                        }
+                            @if (Model.User != null && p.User.Id == Model.User.Id)
+                            {
+                                <a class="userbuttons" asp-controller="Comments" asp-action="Edit" asp-route-id="@p.CommentId">
+                                    <img width="40" src="~/images/edit.png" />
+                                </a>
+                                <a class="userbuttons" asp-controller="Comments" asp-action="Delete" asp-route-id="@p.CommentId">
+                                    <img width="27" src="~/images/delete.png" />
+                                </a>
+                            }
                         </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>        
-            }
+                        </td>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
 
     </div>
 </div>

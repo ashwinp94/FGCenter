@@ -26,6 +26,13 @@ namespace FGCenter.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> YourComments()
+        {
+            ApplicationUser user = await GetCurrentUserAsync();
+
+            return View(await _context.Comment.Where(p => p.UserId == user.Id).ToListAsync());
+        }
+
         // GET: Comments/Create
         public IActionResult Create(int id)
         {
